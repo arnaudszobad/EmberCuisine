@@ -1,0 +1,17 @@
+/* Put your CSS here */
+html, body {
+    margin: 20px;
+}
+
+a{
+    display:inline-block;
+    margin: 0px 10px;
+    /*background-color: #999;*/
+}
+
+span.inactive{
+    color:red;
+}
+span.active{
+    color:green;
+}

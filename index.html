@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>EmberCuisine</title>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <script type="text/x-handlebars">
+        <h2>EmberCuisine</h2>
+        {{#linkTo user.recipes}}Index des recettes{{/linkTo}}
+        {{#linkTo user.create}}Créer une recette{{/linkTo}}
+        {{outlet}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="index">
+        Module Recette
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="user/index">
+        Ma vue d index implicite de l application
+        <ul>
+        {{#each item in model}}
+          <li>{{item}}</li>
+        {{/each}}
+        </ul>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="user/recipes">
+        <br />Liste des recettes
+        {{#each item in model}}
+          <li>{{#linkTo user.detail item}}<span {{bindAttr class="item.active:active:inactive"}}>{{item.title}}{{/linkTo}}</span> - <button {{action "remove" item.id}}>
+        Delete
+    </button></li>
+        {{/each}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="user/detail">
+        <br />Détail de la recette {{title}} <br />
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="user/create">
+        <br />Création dune nouvelle recette <br />
+        {{view Ember.TextField placeholder="New name" valueBinding="title" action="createRecipe" target=controller}}
+    </script>
+
+    <script src="js/libs/jquery-1.9.1.js"></script>
+    <script src="js/libs/handlebars-1.0.0-rc.4.js"></script>
+    <script src="js/libs/ember-1.0.0-rc.5.js"></script>
+    <script src="js/libs/ember-data.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>
