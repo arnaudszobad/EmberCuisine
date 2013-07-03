@@ -16,8 +16,6 @@ App.Store = DS.Store.extend({
     revision: 12,
     adapter: DS.FixtureAdapter.extend({
         queryFixtures: function(fixtures, query, type){
-            // console.log(query);
-            // console.log(type);
             return fixtures.filter(function(item){
                 for(prop in query){
                     if(item[prop] != query[prop]){
@@ -32,23 +30,28 @@ App.Store = DS.Store.extend({
 
 App.UserRecipesRoute = Ember.Route.extend({
     model:function(){
-        return App.Recipe.find({active:1});
+        return App.Recipe.find();
     }
 });
 
 App.UserRecipesController = Ember.ObjectController.extend({
-    remove:function(item){
-        var recipe = App.Recipe.find(item);
-        recipe.set('active',0);
-
+    remove:function(itemid){
+        var recipe = App.Recipe.find(itemid);
+        recipe.set('active',false);
+        // recipe.deleteRecord();
     }
 });
 
 App.UserCreateRoute = Ember.Route.extend({
+    model:function(){
+        return Ember.Object.extend();
+    },
     events:{
-        createRecipe:function(){
+        save:function(){
             var title = this.get('controller.title');
-            var newRecipe = App.Recipe.createRecord({title:title});
+            var isactive = this.get('controller.active');
+            if(isactive == undefined) isactive = false;
+            var newRecipe = App.Recipe.createRecord({title:title,active:isactive});
             newRecipe.save();
         }
     }
@@ -56,30 +59,33 @@ App.UserCreateRoute = Ember.Route.extend({
 
 App.UserDetailRoute = Ember.Route.extend({
     model : function(params){
-        // console.log(App.Recipe.find(params.id));
         return App.Recipe.find(params.id);
     }
 });
 
 App.Recipe = DS.Model.extend({
     title:   DS.attr('string'),
-    active:  DS.attr('boolean')
+    active:  DS.attr('boolean'),
+    ingredients: DS.attr('array')
 });
 
 App.Recipe.FIXTURES = [
  {
    id: 1,
    title: 'Chocolat aux pruneaux',
-   active:1
+   active:true,
+   ingredients:['chocolat','pruneaux']
  },
  {
    id: 2,
    title: 'Café frappé',
-   active:0
+   active:true,
+   ingredients:['café','glace']
  },
  {
    id: 3,
    title: 'Polenta sucrée',
-   active:1
+   active:true,
+   ingredients:['polenta','sucre']
  }
 ];

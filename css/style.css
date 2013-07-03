@@ -6,12 +6,18 @@ html, body {
 a{
     display:inline-block;
     margin: 0px 10px;
-    /*background-color: #999;*/
+    text-align: center !important;
+}
+a:hover,
+a:focus{
+    text-decoration: none !important;
+    color:#ff5d00 !important;
+    /*text-align: center !important;*/
 }
 
-span.inactive{
+span.inactive a{
     color:red;
 }
-span.active{
+span.active a{
     color:green;
 }
