@@ -1,55 +1,59 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>EmberCuisine</title>
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-</head>
-<body>
+    <head>
+    <meta charset="utf-8">
+    <title>EmberCuisine</title>
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+    </head>
+    <body>
 
-    <script type="text/x-handlebars">
-    <div class="container row">
-        <h1>EmberCuisine</h1>
-        <ul class="row nav nav-tabs">
-            <li class="span3">{{#linkTo index}}Accueil{{/linkTo}}</li>
-            <li class="span3">{{#linkTo user.recipes}}Index des recettes{{/linkTo}}</li>
-            <li class="span3">{{#linkTo user.create}}Créer une recette{{/linkTo}}</li>
-        </ul>
-        {{outlet}}
-    </div>
+    <script type="text/x-handlebars" data-template-name="application">
+        <div class="container row">
+            <header class="page-header">
+                <h1 class="alert text-center">EmberCuisine</h1>
+            </header>
+            <ul class="row nav nav-tabs">
+                <li class="span3">{{#linkTo index}}Accueil{{/linkTo}}</li>
+                <li class="span3">{{#linkTo user.recipes}}Index des users{{/linkTo}}</li>
+                <li class="span3">{{#linkTo create}}Créer une recette{{/linkTo}}</li>
+            </ul>
+            {{outlet}}
+        </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="index">
-        <h3>Module Recette - template index</h3>
+        <h3 class="text-center">Module Recette - template index</h3>
     </script>
 
-    <script type="text/x-handlebars" data-template-name="user/index">
-        Ma vue d index implicite de l application
+    <script type="text/x-handlebars" data-template-name="user">
+        <h3>Module Recette - template user</h3>
         <ul class="nav">
-        {{#each item in model}}
-          <li>{{item}}</li>
+        {{#each user in model}}
+          <li>{{#linkTo user.edit user}}{{user.prenom}} {{user.nom}}{{/linkTo}}</li>
         {{/each}}
         </ul>
+        {{outlet}}
     </script>
 
-    <script type="text/x-handlebars" data-template-name="user/recipes">
-        <h2>Liste des recettes</h2>
-        <ul class="nav container span4">
-            {{#each item in model}}
-            <li class="span6">
-                <div>
-                    <span {{bindAttr class="item.active:active:inactive :span3"}}>{{#linkTo user.detail item}}{{item.title}}{{/linkTo}}</span>
-                    <span class="span1"><button {{action "remove" item.id}}>Delete</button></span>
-                </div>
-            </li>
-            {{/each}}
-        </ul>
+    <script type="text/x-handlebars" data-template-name="user/edit">
+        <div class="row">
+            <div class="span12">Edition du user : {{prenom}} {{nom}}</div>
+            <div class="span3">Affichage des recettes du user</div>
+            <div class="span9">
+            {{#if recipes.length}}
+                {{#each recipe in recipes}}
+                    <div>{{#linkTo user.detail recipe}}{{recipe.title}}{{/linkTo}}</div>
+                {{/each}}
+            {{/if}}
+            </div>
+        </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="user/detail">
-        <h3>Détail de la recette {{title}} </h3>
+
+        <h3>Détail de la recette {{title}} du user {{user.prenom}}</h3>
         <div class="container">
             <div class="row">
                 <div>
@@ -98,24 +102,29 @@
         </div>
     </script>
 
-    <script type="text/x-handlebars" data-template-name="user/create">
+    <script type="text/x-handlebars" data-template-name="create">
         <h3>Création/Edition dune nouvelle recette</h3>
         <div class="container-inner">
             <div class="span12">
                 <div class="span2">Titre de la recette</div>
-                <div class="span6">{{view Ember.TextField placeholder="New name" valueBinding="controller.title"}}</div>
+                <div class="span6">{{view Ember.TextField placeholder="New name" valueBinding="model.title"}}</div>
             </div>
             <div class="span12">
                 <div class="span2">Active ?</div>
-                <div class="span6">{{view Ember.Checkbox checkedBinding="controller.active"}}</div>
+                <div class="span6">{{view Ember.Checkbox checkedBinding="model.active"}}</div>
             </div>
             <div class="span12">
-                <div class="span2">Ingrédients</div>
-                <div class="span3">{{view Ember.TextField placeholder="Ingrédient"}}</div>
-                <div class="span2"><button class="btn btn-info" {{action addingredient}}>Add</button>
-            </div>
-            <div class="span12">
-                <div class="span2"><button {{action "save"}}>Save</button></div>
+                <div class="span12">Ingrédients <button class="btn btn-mini btn-info" {{action addingredient}}>Add</button></div>
+                    {{#each ingr in model.ingredients}}
+                        <div>
+                            {{view Ember.TextField placeholder="Ingrédient" valueBinding="ingr.ing"}}
+                            <button class="btn btn-small btn-danger" {{action removeingredient ingr}}>Del</button></span>
+                        </div>
+                    {{/each}}
+                </div>
+                <div class="container">
+                    <div><button class="btn btn-small btn-success" {{action "save"}}>Save</button></div>
+                </div>
             </div>
         </div>
     </script>
@@ -126,5 +135,5 @@
     <script src="js/libs/ember-data.js"></script>
     <script src="js/app.js"></script>
 
-</body>
+    </body>
 </html>

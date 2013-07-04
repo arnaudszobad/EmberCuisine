@@ -21,3 +21,7 @@ span.inactive a{
 span.active a{
     color:green;
 }
+
+button.btn.btn-small, input[type="submit"].btn.btn-small {
+    margin-bottom: 10px;
+}
