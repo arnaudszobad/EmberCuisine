@@ -2,7 +2,6 @@
 
 App = Ember.Application.create();
 
-
 App.Router.map(function() {
   // put your routes here
   this.resource('user',function(){
@@ -28,17 +27,23 @@ App.Store = DS.Store.extend({
     })
 });
 
+// ####### ROUTES #######
+// App.UserRoute = ember.Route.extend({
+//     renderTemplate:function(){
+//         this.render("user/recipes");
+//     }
+// })
+
 App.UserRecipesRoute = Ember.Route.extend({
     model:function(){
         return App.Recipe.find();
-    }
-});
-
-App.UserRecipesController = Ember.ObjectController.extend({
-    remove:function(itemid){
-        var recipe = App.Recipe.find(itemid);
-        recipe.set('active',false);
-        // recipe.deleteRecord();
+    },
+    events:{
+        remove:function(itemid){
+            var recipe = App.Recipe.find(itemid);
+            recipe.set('active',false);
+            // recipe.deleteRecord();
+        }
     }
 });
 
@@ -53,6 +58,9 @@ App.UserCreateRoute = Ember.Route.extend({
             if(isactive == undefined) isactive = false;
             var newRecipe = App.Recipe.createRecord({title:title,active:isactive});
             newRecipe.save();
+        },
+        addingredient:function(){
+
         }
     }
 });
@@ -63,29 +71,77 @@ App.UserDetailRoute = Ember.Route.extend({
     }
 });
 
+// ####### CONTROLLERS #######
+
+
+// ####### FIXTURES #######
+App.Ingredients = DS.Model.extend({
+    ing:   DS.attr('string'),
+    recipe:DS.belongsTo('App.Recipe')
+});
+App.Ingredients.FIXTURES = [
+{
+    id: 1,
+    ing: 'chocolat'
+},
+{
+    id: 2,
+    ing: 'pruneaux'
+},
+{
+    id: 3,
+    ing: 'sucre'
+},
+{
+    id: 4,
+    ing: 'café'
+},
+{
+    id: 5,
+    ing: 'glace'
+},
+{
+    id: 6,
+    ing: 'polenta'
+},
+{
+    id: 7,
+    ing: 'vanille'
+},
+{
+    id: 8,
+    ing: 'fraise'
+},
+{
+    id: 9,
+    ing: 'mûres'
+}
+];
+
 App.Recipe = DS.Model.extend({
     title:   DS.attr('string'),
     active:  DS.attr('boolean'),
-    ingredients: DS.attr('array')
+    ingredients: DS.hasMany('App.Ingredients')
 });
-
 App.Recipe.FIXTURES = [
  {
    id: 1,
    title: 'Chocolat aux pruneaux',
    active:true,
-   ingredients:['chocolat','pruneaux']
+   ingredients:[1,2]
  },
  {
    id: 2,
    title: 'Café frappé',
    active:true,
-   ingredients:['café','glace']
+   ingredients:[4,5]
  },
  {
    id: 3,
    title: 'Polenta sucrée',
    active:true,
-   ingredients:['polenta','sucre']
+   ingredients:[6,3,7,2]
  }
 ];
+
+

@@ -13,6 +13,7 @@
     <div class="container row">
         <h1>EmberCuisine</h1>
         <ul class="row nav nav-tabs">
+            <li class="span3">{{#linkTo index}}Accueil{{/linkTo}}</li>
             <li class="span3">{{#linkTo user.recipes}}Index des recettes{{/linkTo}}</li>
             <li class="span3">{{#linkTo user.create}}Créer une recette{{/linkTo}}</li>
         </ul>
@@ -21,7 +22,7 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name="index">
-        <h3>Module Recette</h3>
+        <h3>Module Recette - template index</h3>
     </script>
 
     <script type="text/x-handlebars" data-template-name="user/index">
@@ -49,37 +50,74 @@
 
     <script type="text/x-handlebars" data-template-name="user/detail">
         <h3>Détail de la recette {{title}} </h3>
-        <div class="container row">
-            <div class="span8">
+        <div class="container">
+            <div class="row">
+                <div>
+                    <span class="span2"><b>Titre : </b></span>
+                    <span class="span4">{{title}}</span>
+                </div>
+                <div>
+                    <span class="span2"><b>Active ? : </b></span>
+                    <span class="span4">{{active}}</span>
+                </div>
+                <div>
+                    <span class="span2"><b>Ingredients :</b></span>
+                    <span class="span4">
+                        {{#if ingredients.length}}
+                        <ul class="nav">
+                        {{#each ingredient in ingredients}}
+                            <li>{{ingredient.ing}}</li>
+                        {{/each}}
+                        </ul>
+                        {{/if}}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <br /><br /><br />
+        <div class="container">
+            <div class="span12 row">
+                <div class="span3">Titre de la recette</div>
+                <div class="span6">{{view Ember.TextField placeholder="New name" valueBinding="controller.title"}}</div>
+            </div>
+            <div class="span12 row">
+                <div class="span3">Active ?</div>
+                <div class="span6">{{view Ember.Checkbox checkedBinding="controller.active"}}</div>
+            </div>
+            <div class="span12 row">
+                <div class="span12">Ingrédients</div>
                 <ul class="nav">
-                    <li>
-                        <span class="span2"><b>Titre : </b></span>
-                        <span class="span4">{{title}}</span>
-                    </li>
-                    <li>
-                        <span class="span2"><b>Active ? : </b></span>
-                        <span class="span4">{{active}}</span>
-                    </li>
-                    <li>
-                        <span class="span2"><b>Ingredients :</b></span>
-                        <span class="span4">
-                            <ul class="nav">
-                            {{#each ingredients}}
-                                <li>{{this}}</li>
-                            {{/each}}
-                            </ul>
-                        </span>
-                    </li>
+                {{#each ingredient in ingredients}}
+                    <li class="span3 offset1">{{view Ember.TextField placeholder="ingredient" valueBinding="ingredient.ing"}}</li>
+                {{/each}}
                 </ul>
+            </div>
+            <div class="span12 row">
+                <div class="span2"><button {{action "save"}}>Save</button></div>
             </div>
         </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="user/create">
-        <h3>Création dune nouvelle recette</h3>
-        {{view Ember.TextField placeholder="New name" valueBinding="controller.title"}}
-        {{view Ember.Checkbox checkedBinding="controller.active"}}
-        <button {{action "save"}}>Save</button>
+        <h3>Création/Edition dune nouvelle recette</h3>
+        <div class="container-inner">
+            <div class="span12">
+                <div class="span2">Titre de la recette</div>
+                <div class="span6">{{view Ember.TextField placeholder="New name" valueBinding="controller.title"}}</div>
+            </div>
+            <div class="span12">
+                <div class="span2">Active ?</div>
+                <div class="span6">{{view Ember.Checkbox checkedBinding="controller.active"}}</div>
+            </div>
+            <div class="span12">
+                <div class="span2">Ingrédients</div>
+                <div class="span3">{{view Ember.TextField placeholder="Ingrédient"}}</div>
+                <div class="span2"><button class="btn btn-info" {{action addingredient}}>Add</button>
+            </div>
+            <div class="span12">
+                <div class="span2"><button {{action "save"}}>Save</button></div>
+            </div>
+        </div>
     </script>
 
     <script src="js/libs/jquery-1.9.1.js"></script>
